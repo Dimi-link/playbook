@@ -1,0 +1,31 @@
+---
+- hosts: clickhouse
+  roles:
+    - clickhouse
+  post_tasks:
+    - name: Create log table
+      tags: clickhouse_db
+      import_tasks: post_tasks/create_log_table.yml
+  vars_files:
+    - vars/clickhouse.yml
+
+- hosts: vector
+  pre_tasks:
+  - name: Add clickhouse addresses to /etc/hosts
+    import_tasks: pre_tasks/hosts.yml
+  roles:
+    - vector-role
+  vars_files:
+    - vars/vector.yml
+
+- hosts: lighthouse
+  pre_tasks:
+  - name: Install packages
+    import_tasks: pre_tasks/install_packs.yml
+  - name: Install nginx
+    import_tasks: pre_tasks/install_nginx.yml
+  roles:
+    - name: lighthouse-role
+  post_tasks:
+  - name: Config nginx
+    import_tasks: post_tasks/config_nginx.yml

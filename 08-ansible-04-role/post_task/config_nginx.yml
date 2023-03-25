@@ -1,0 +1,9 @@
+---
+- name: Nginx configuration
+          tags: nginx_config
+          become: true
+          ansible.builtin.copy:
+            dest: /etc/nginx/conf.d/lighthouse.conf
+            content: |
+              {{ nginx_conf }}
+          notify: Start nginx service

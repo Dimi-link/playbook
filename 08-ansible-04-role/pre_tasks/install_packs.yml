@@ -1,0 +1,7 @@
+---
+- name: Install packages
+      become: true
+      ansible.builtin.yum:
+        name:
+          - epel-release
+          - unzip
