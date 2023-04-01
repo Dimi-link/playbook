@@ -1,0 +1,17 @@
+node("centos"){
+    stage("Git checkout"){
+        dir('/playbook/08-ansible-04-role'){
+            git branch: 'main', credentialsId: 'f18be4bd-34ae-4d01-ce2f-7ea1c7caf1d1', url: 'git@github.com:Dimi-link/playbook.git'
+        }
+    }
+    stage("Download Ansible roles"){
+        dir('/playbook/08-ansible-04-role'){
+            sh 'ansible-galaxy install -r requirements.yml -p roles --force'
+        }
+    }
+    stage("Run playbook"){
+        dir('/playbook/08-ansible-04-role'){
+            sh 'ansible-playbook site.yml -i inventory/prod.yml'
+        }
+    }
+}
